@@ -2,6 +2,32 @@
 
 This project demonstrates the deployment of a personal resume on AWS using the following services: Amazon S3, CloudFront, Certificate Manager, and Route 53. This setup ensures a highly available, secure, and fast-loading resume website.
 
+Here's the table of contents for your README file:
+
+---
+
+## Table of Contents
+
+- [Resume Deployment on AWS](#resume-deployment-on-aws)
+- [Prerequisites](#prerequisites)
+- [Architecture](#architecture)
+- [Setup Instructions](#setup-instructions)
+  - [1. Create an S3 Bucket](#1-create-an-s3-bucket)
+    - [Upload Resume to S3](#upload-resume-to-s3)
+    - [Configure S3 Bucket for Static Website Hosting](#configure-s3-bucket-for-static-website-hosting)
+  - [2. Obtain SSL Certificate with Certificate Manager](#2-obtain-ssl-certificate-with-certificate-manager)
+  - [3. Configure Route 53 for Custom Domain](#3-configure-route-53-for-custom-domain)
+    - [Update Your Domain's Nameservers](#update-your-domains-nameservers)
+  - [4. Set Up CloudFront Distribution](#4-set-up-cloudfront-distribution)
+  - [5. Update Route 53 to Direct Traffic to CloudFront](#5-update-route-53-to-direct-traffic-to-cloudfront)
+  - [6. Editing S3 Bucket Policy for CloudFront to Access S3 Bucket](#6-editing-s3-bucket-policy-for-cloudfront-to-access-s3-bucket)
+- [Testing and Verification](#testing-and-verification)
+- [Link to Resume](#link-to-resume)
+
+---
+
+Feel free to adjust the table of contents as needed based on any additional sections or modifications to your README file!
+
 ## Prerequisites
 
 - An AWS account
