@@ -173,6 +173,7 @@ Here is a sample bucket policy:
 ![WhatsApp Image 2024-06-27 at 2 25 59 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/f9224744-0a1f-468a-95ee-dd39cf272733)
 
 ## Link to resume
-[cloudresume: ](trintacloud.buzz)
+https://trintacloud.buzz
+
 
 
