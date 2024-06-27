@@ -75,8 +75,20 @@ The deployment architecture includes:
    
    ![WhatsApp Image 2024-06-27 at 12 05 31 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/5c2c928c-20cf-4110-aad9-848c91e13b23)
 
+
+## 3. Configure Route 53 for Custom Domain
+
+1. Go to the Route 53 service in the AWS Management Console.
+2. Click on "Create Hosted zones" and enter your domain name.
+3. Click on "Hosten Zones"
    
-## 3. Set Up CloudFront Distribution
+### Update Your Domain's Nameservers
+After creating the hosted zone, Route 53 will provide you with a list of nameservers.
+Go to your domain registrar's website (where you purchased your domain) and update the nameservers to the ones provided by Route 53. 
+![WhatsApp Image 2024-06-27 at 12 46 05 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/b743f789-8d81-4d21-8dd6-d30dfe2adab3)
+
+
+## 4. Set Up CloudFront Distribution
 
 1. Go to the CloudFront service in the AWS Management Console.
 2. Click "Create Distribution".
@@ -96,13 +108,81 @@ The deployment architecture includes:
 
 
 
+## 5. Update Route 53 to Direct Traffic to CloudFront
 
-### 6. Configure Route 53 for Custom Domain
+1. **Create an Alias Record in Route 53**:
+   - Go back to the Route 53 dashboard and navigate to your hosted zone.
+   - Click on "Create Record."
+   - **Record Name**: Leave it blank to map the root domain
+   - **Record Type**: Select "A – IPv4 address."
+   - **Alias**: Turn on the "Alias" toggle.
+   -  On the "route traffic to" choose, Select Alias to CloudFront distribution and select the distribution we created earlier.
+   - Select "Simple Routing" on the routing policy"
+   - Click "Create Records."
+     ![WhatsApp Image 2024-06-27 at 12 58 49 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/b5464ab3-eeb7-4e45-befc-3e355aa0dd5e)
 
-1. Go to the Route 53 service in the AWS Management Console.
-2. Click on "Hosted zones" and select your domain.
-3. Create a new A record and select "Alias" to your CloudFront distribution.
-4. Ensure your domain's name servers are set correctly with your domain registrar.
+
+2. **Wait for DNS Propagation**:
+   - DNS changes may take some time to propagate. Typically, this can take a few minutes.
+     ![WhatsApp Image 2024-06-27 at 1 03 02 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/a5e3a755-d4bc-4952-8650-1ea8082d5667)
+
+## 6. Editing S3 Bucket Policy for CloudFront to Access S3 bucket
+We need to enable CloudFront to access our S3 bucket and serve content. We therefore need to edit the S3 bucket policy to allow access from the CloudFront origin.
+
+1. **Select Your Distribution**:
+   - Click on the ID of the distribution you want to configure and Copy the ID name.
+     ![WhatsApp Image 2024-06-27 at 1 11 28 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/97422375-3b3c-4e5c-9f01-f8a91329e1a3)
+   - Copy ARN name of the Distribution ID into a notepad
+
+2: Update Your S3 Bucket Policy
+- Navigate to S3 
+- Click on the name of the bucket you are using as the origin for your CloudFront distribution.
+
+3. **Open the Permissions Tab**:
+   - Go to the "Permissions" tab.
+
+4. **Edit the Bucket Policy**:
+   - Under "Bucket policy," click on the "Edit" button.
+   - Add a new policy that grants the CloudFront OAI access to the bucket. Replace `YOUR_OAI` with the actual OAI from your CloudFront distribution and `YOUR_BUCKET_NAME` with your bucket name.
+
+Here is a sample bucket policy:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Id": "PolicyForCloudFrontPrivateContent",
+    "Statement": [
+        {
+            "Sid": "1",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity YOUR_OAI"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+        }
+    ]
+}
+```
+
+### Step 3: Save the Policy
+
+- After adding the policy, click "Save changes."
+
+### Step 4: Verify the Configuration
+
+1. **Test Access**:
+   - Try to access your S3 content through the CloudFront distribution URL. You should be able to see the content being served from CloudFront.
+
+2. **Check CloudFront**:
+   - Ensure that your CloudFront distribution is working correctly and serving the files from your S3 bucket.
+
+By following these steps, you grant CloudFront permission to access your S3 bucket using the specified Origin Access Identity (OAI). This ensures that your S3 content is only accessible through CloudFront and not directly from the S3 bucket URL, enhancing the security of your content.
+
+
+
+Once the DNS changes have propagated, your domain should direct traffic to your CloudFront distribution, and visitors to your domain will be served content from CloudFront.
+
 
 ## Testing and Verification
 
