@@ -175,5 +175,10 @@ Here is a sample bucket policy:
 ## Link to resume
 https://trintacloud.buzz
 
+## Credits
+
+The HTML and CSS files for this resume were written by Anne Andega.
+
+
 
 
