@@ -35,7 +35,7 @@ The deployment architecture includes:
 
 ## Setup Instructions
 
-### 1. Create an S3 Bucket
+## 1. Create an S3 Bucket
 
 1. Go to the S3 service in the AWS Management Console.
 2. Click "Create bucket".
@@ -43,14 +43,14 @@ The deployment architecture includes:
 4. Uncheck "Block all public access" and acknowledge that the bucket will be public.
 5. Click "Create bucket".
 
-### 2. Upload Resume to S3
+### Upload Resume to S3
 
 1. Open your newly created S3 bucket.
 2. Click "Upload" and select your resume files (i.e, `index.html`, `style.css`).
    ![WhatsApp Image 2024-06-27 at 11 42 50 AM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/cf442531-8915-4065-8f4d-b07a1bd232ef)
 
 
-### 3. Configure S3 Bucket for Static Website Hosting
+### Configure S3 Bucket for Static Website Hosting
 
 1. In the S3 bucket properties, click on "Static website hosting" and choose "Enable".
 2. On the hosting type select "Host a static website".
@@ -60,7 +60,7 @@ The deployment architecture includes:
    ![WhatsApp Image 2024-06-27 at 11 45 53 AM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/78556b73-f9f4-4765-9fb8-3eae759bacdc)
 
 
-### 4. Obtain SSL Certificate with Certificate Manager
+## 2. Obtain SSL Certificate with Certificate Manager
 
 1. Go to the Certificate Manager in the AWS Management Console.
 2. Click "Request a certificate".
@@ -72,18 +72,28 @@ The deployment architecture includes:
 
 6. Click on Validate the domain ownership via DNS.
 7. Click on "Request".
+   
    ![WhatsApp Image 2024-06-27 at 12 05 31 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/5c2c928c-20cf-4110-aad9-848c91e13b23)
 
    
-### 4. Set Up CloudFront Distribution
+## 3. Set Up CloudFront Distribution
 
 1. Go to the CloudFront service in the AWS Management Console.
 2. Click "Create Distribution".
 3. In the "Origin Settings", select the S3 bucket domain and choose use website endpoint.
    ![WhatsApp Image 2024-06-27 at 11 56 18 AM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/7e1436f7-6657-4880-a1b9-f27fb3b1aba9)
 
-5. Configure the distribution settings as desired, ensuring to set the default root object to `index.html`.
-6. Click "Create Distribution".
+4. On the 'Viewer' select 'Redirect HTTP to HTTPS'
+![WhatsApp Image 2024-06-27 at 12 11 06 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/9d03f55c-cd92-4c54-b909-a7a27641d2c7)
+5. On the 'Web Application Firewall' select 'Do not enable security protections'.
+6. Choose 'Alternate domain name' and enter your desired domain name.
+7. Select Custom SSL certificate and select your SSL certificate that was issued.
+   ![WhatsApp Image 2024-06-27 at 12 15 39 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/c3f6326e-7e8d-47d4-a247-7f16d0ddeb08)
+
+9. Set the default root object to `index.html`.
+10. Click "Create Distribution".
+    ![WhatsApp Image 2024-06-27 at 12 17 28 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/d452a4a6-6f80-4e96-8515-860e25187932)
+
 
 
 
