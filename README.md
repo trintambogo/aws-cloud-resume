@@ -137,63 +137,42 @@ We need to enable CloudFront to access our S3 bucket and serve content. We there
 2: Update Your S3 Bucket Policy
 - Navigate to S3 
 - Click on the name of the bucket you are using as the origin for your CloudFront distribution.
-
-3. **Open the Permissions Tab**:
-   - Go to the "Permissions" tab.
-
-4. **Edit the Bucket Policy**:
-   - Under "Bucket policy," click on the "Edit" button.
-   - Add a new policy that grants the CloudFront OAI access to the bucket. Replace `YOUR_OAI` with the actual OAI from your CloudFront distribution and `YOUR_BUCKET_NAME` with your bucket name.
+- Go to the "Permissions" tab.
+- Under "Bucket policy," click on the "Edit" button.
+- Add a new policy that grants the CloudFront OAI access to the bucket. Replace `AWS:SourceArn` with the actual ARN from your CloudFront distribution and `S3 bucket name` with your bucket name.
 
 Here is a sample bucket policy:
 
 ```json
 {
     "Version": "2012-10-17",
-    "Id": "PolicyForCloudFrontPrivateContent",
-    "Statement": [
-        {
-            "Sid": "1",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity YOUR_OAI"
-            },
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+    "Statement": {
+        "Sid": "AllowCloudFrontServicePrincipalReadOnly",
+        "Effect": "Allow",
+        "Principal": {
+            "Service": "cloudfront.amazonaws.com"
+        },
+        "Action": "s3:GetObject",
+        "Resource": "arn:aws:s3:::<S3 bucket name>/*",
+        "Condition": {
+            "StringEquals": {
+                "AWS:SourceArn": "arn:aws:cloudfront::111122223333:distribution/<CloudFront distribution ID>"
+            }
         }
-    ]
+    }
 }
 ```
-
-### Step 3: Save the Policy
-
 - After adding the policy, click "Save changes."
-
-### Step 4: Verify the Configuration
-
-1. **Test Access**:
-   - Try to access your S3 content through the CloudFront distribution URL. You should be able to see the content being served from CloudFront.
-
-2. **Check CloudFront**:
-   - Ensure that your CloudFront distribution is working correctly and serving the files from your S3 bucket.
-
-By following these steps, you grant CloudFront permission to access your S3 bucket using the specified Origin Access Identity (OAI). This ensures that your S3 content is only accessible through CloudFront and not directly from the S3 bucket URL, enhancing the security of your content.
-
-
-
-Once the DNS changes have propagated, your domain should direct traffic to your CloudFront distribution, and visitors to your domain will be served content from CloudFront.
 
 
 ## Testing and Verification
+- Access your resume website via the custom domain to ensure everything is working correctly.
+![image](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/582e3a38-9948-4887-b73a-9379fcab3151)
 
-1. Wait for the CloudFront distribution to deploy completely.
-2. Access your resume website via the custom domain to ensure everything is working correctly.
 3. Verify that the website is accessible over HTTPS.
+![WhatsApp Image 2024-06-27 at 2 25 59 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/f9224744-0a1f-468a-95ee-dd39cf272733)
 
-## Conclusion
+## Link to resume
+[cloudresume: ](trintacloud.buzz)
 
-By following these steps, you have successfully deployed your resume on AWS using S3, CloudFront, Certificate Manager, and Route 53. This setup provides a scalable, secure, and globally distributed platform for showcasing your resume.
 
----
-
-Feel free to modify and expand upon this template based on your specific project details and personal preferences!
