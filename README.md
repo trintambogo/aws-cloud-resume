@@ -2,13 +2,8 @@
 
 This project demonstrates the deployment of a personal resume on AWS using the following services: Amazon S3, CloudFront, Certificate Manager, and Route 53. This setup ensures a highly available, secure, and fast-loading resume website.
 
-Here's the table of contents for your README file:
-
----
-
 ## Table of Contents
 
-- [Resume Deployment on AWS](#resume-deployment-on-aws)
 - [Prerequisites](#prerequisites)
 - [Architecture](#architecture)
 - [Setup Instructions](#setup-instructions)
@@ -24,9 +19,6 @@ Here's the table of contents for your README file:
 - [Testing and Verification](#testing-and-verification)
 - [Link to Resume](#link-to-resume)
 
----
-
-Feel free to adjust the table of contents as needed based on any additional sections or modifications to your README file!
 
 ## Prerequisites
 
@@ -38,12 +30,7 @@ Feel free to adjust the table of contents as needed based on any additional sect
 
 ![webimage](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/20a68cf9-c47b-435a-a90e-ec81aaf9dd2e)
 
-The deployment architecture includes:
-
-- **Amazon S3**: Stores the static resume files.
-- **CloudFront**: Distributes the content globally with low latency.
-- **Certificate Manager**: Manages SSL/TLS certificates for secure connections.
-- **Route 53**: Manages the DNS settings for the custom domain.
+When a user writes your domain name into their browser, Route 53 translates the domain name into the correct IP address and directs the request to the Cloudfront distribution. Cloudfront then quickly retrieves the resume files from the nearest edge location ensuring fast delivery. These files are stored in Amazon s3 securely and are secured over a secure HTTPS connection managed by certificate manager.
 
 ## Setup Instructions
 
@@ -52,8 +39,7 @@ The deployment architecture includes:
 1. Go to the S3 service in the AWS Management Console.
 2. Click "Create bucket".
 3. Enter a unique bucket name and select the appropriate region.
-4. Uncheck "Block all public access" and acknowledge that the bucket will be public.
-5. Click "Create bucket".
+4. Click "Create bucket".
 
 ### Upload Resume to S3
 
@@ -104,18 +90,19 @@ Go to your domain registrar's website (where you purchased your domain) and upda
 
 1. Go to the CloudFront service in the AWS Management Console.
 2. Click "Create Distribution".
-3. In the "Origin Settings", select the S3 bucket domain and choose use website endpoint.
+3. In the "Origin Settings", select the S3 bucket domain.
    ![WhatsApp Image 2024-06-27 at 11 56 18 AM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/7e1436f7-6657-4880-a1b9-f27fb3b1aba9)
-
-4. On the 'Viewer' select 'Redirect HTTP to HTTPS'
+4. On the origin access, choose "Origin access control settings (recommended)" and create new OAC
+5. Click on Create
+6. On the 'Viewer' select 'Redirect HTTP to HTTPS'
 ![WhatsApp Image 2024-06-27 at 12 11 06 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/9d03f55c-cd92-4c54-b909-a7a27641d2c7)
-5. On the 'Web Application Firewall' select 'Do not enable security protections'.
-6. Choose 'Alternate domain name' and enter your desired domain name.
-7. Select Custom SSL certificate and select your SSL certificate that was issued.
+7. On the 'Web Application Firewall' select 'Do not enable security protections'.
+8. Choose 'Alternate domain name' and enter your desired domain name.
+9. Select Custom SSL certificate and select your SSL certificate that was issued.
    ![WhatsApp Image 2024-06-27 at 12 15 39 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/c3f6326e-7e8d-47d4-a247-7f16d0ddeb08)
 
-9. Set the default root object to `index.html`.
-10. Click "Create Distribution".
+10. Set the default root object to `index.html`.
+11. Click "Create Distribution".
     ![WhatsApp Image 2024-06-27 at 12 17 28 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/d452a4a6-6f80-4e96-8515-860e25187932)
 
 
@@ -146,7 +133,7 @@ We need to enable CloudFront to access our S3 bucket and serve content. We there
      ![WhatsApp Image 2024-06-27 at 1 11 28 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/97422375-3b3c-4e5c-9f01-f8a91329e1a3)
    - Copy ARN name of the Distribution ID into a notepad
 
-2: Update Your S3 Bucket Policy
+2. **Update Your S3 Bucket Policy**:
 - Navigate to S3 
 - Click on the name of the bucket you are using as the origin for your CloudFront distribution.
 - Go to the "Permissions" tab.
@@ -179,7 +166,8 @@ Here is a sample bucket policy:
 
 ## Testing and Verification
 - Access your resume website via the custom domain to ensure everything is working correctly.
-![image](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/582e3a38-9948-4887-b73a-9379fcab3151)
+![WhatsApp Image 2024-06-27 at 2 59 58 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/5ad00816-047e-4f6d-93c2-ef3d5715e1b1)
+
 
 3. Verify that the website is accessible over HTTPS.
 ![WhatsApp Image 2024-06-27 at 2 25 59 PM](https://github.com/trintambogo/aws-cloud-resume/assets/87088123/f9224744-0a1f-468a-95ee-dd39cf272733)
